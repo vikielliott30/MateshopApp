@@ -133,3 +133,5 @@ C:\Users\Usuario\Universidad\4to\IngSW3\FINAL\MateshopApp\MateshopApi\MateshopAp
 C:\Users\Usuario\Universidad\4to\IngSW3\FINAL\MateshopApp\MateshopApi\MateshopApi\obj\Debug\net8.0\MateshopApi.pdb
 C:\Users\Usuario\Universidad\4to\IngSW3\FINAL\MateshopApp\MateshopApi\MateshopApi\obj\Debug\net8.0\MateshopApi.genruntimeconfig.cache
 C:\Users\Usuario\Universidad\4to\IngSW3\FINAL\MateshopApp\MateshopApi\MateshopApi\obj\Debug\net8.0\ref\MateshopApi.dll
+C:\Users\Usuario\Universidad\4to\IngSW3\FINAL\MateshopApp\MateshopApi\MateshopApi\bin\Debug\net8.0\appesttings.Development.json
+C:\Users\Usuario\Universidad\4to\IngSW3\FINAL\MateshopApp\MateshopApi\MateshopApi\bin\Debug\net8.0\appsettings.json
