@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<testsuite name="Chrome Headless 136.0.0.0 (Linux x86_64)" package="" timestamp="2025-07-03T22:02:10" id="0" hostname="e14" tests="37" errors="0" failures="0" time="0.15">
+  <properties>
+    <property name="browser.fullName" value="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.0.0 Safari/537.36"/>
+  </properties>
+  <testcase name="AppComponent should return userId from authService" time="0.046" classname="AppComponent"/>
+  <testcase name="AppComponent should navigate to a given path" time="0.004" classname="AppComponent"/>
+  <testcase name="AppComponent should render title" time="0.004" classname="AppComponent"/>
+  <testcase name="AppComponent should have the 'mozziebooks' title" time="0.003" classname="AppComponent"/>
+  <testcase name="AppComponent should return isAuthenticated from authService" time="0.004" classname="AppComponent"/>
+  <testcase name="AppComponent should create the app" time="0.002" classname="AppComponent"/>
+  <testcase name="BookPostService should fetch all book posts" time="0.002" classname="BookPostService"/>
+  <testcase name="BookPostService should delete book post if user is the owner" time="0.002" classname="BookPostService"/>
+  <testcase name="BookPostService should fetch a book post by id" time="0.001" classname="BookPostService"/>
+  <testcase name="BookPostService should throw error if user tries to delete a post they dont own" time="0.001" classname="BookPostService"/>
+  <testcase name="BookPostService should throw error if user tries to update a post they dont own" time="0.001" classname="BookPostService"/>
+  <testcase name="BookPostService should be created" time="0" classname="BookPostService"/>
+  <testcase name="BookPostService should add a book post when user is authenticated" time="0" classname="BookPostService"/>
+  <testcase name="BookPostService should throw error when adding if user is not authenticated" time="0.001" classname="BookPostService"/>
+  <testcase name="BookPostService should update book post if user is the owner" time="0.001" classname="BookPostService"/>
+  <testcase name="AuthService should be created" time="0.001" classname="AuthService"/>
+  <testcase name="AuthService should save userId to localStorage" time="0.001" classname="AuthService"/>
+  <testcase name="AuthService should return true if authenticated" time="0" classname="AuthService"/>
+  <testcase name="AuthService should return false if not authenticated" time="0" classname="AuthService"/>
+  <testcase name="AuthService should remove userId on logout" time="0.001" classname="AuthService"/>
+  <testcase name="AuthService should return null if userId is not in localStorage" time="0.001" classname="AuthService"/>
+  <testcase name="AuthService should send login request with correct data" time="0.001" classname="AuthService"/>
+  <testcase name="AuthService should get userId from localStorage" time="0.001" classname="AuthService"/>
+  <testcase name="BookPostFormComponent should call addBookPost on submit when not in edit mode" time="0.017" classname="BookPostFormComponent"/>
+  <testcase name="BookPostFormComponent should set userId on init if not edit mode" time="0.005" classname="BookPostFormComponent"/>
+  <testcase name="BookPostFormComponent should create" time="0.005" classname="BookPostFormComponent"/>
+  <testcase name="BookPostFormComponent should call updateBookPost on submit when in edit mode" time="0.003" classname="BookPostFormComponent"/>
+  <testcase name="BookPostFormComponent should load bookPost in edit mode" time="0.007" classname="BookPostFormComponent"/>
+  <testcase name="LoginComponent should update username and password from the template" time="0.013" classname="LoginComponent"/>
+  <testcase name="LoginComponent should alert on login failure" time="0.003" classname="LoginComponent"/>
+  <testcase name="LoginComponent should call login and navigate on success" time="0.002" classname="LoginComponent"/>
+  <testcase name="LoginComponent should create" time="0.002" classname="LoginComponent"/>
+  <testcase name="BookPostsComponent should navigate to edit page when editBookPost is called" time="0.009" classname="BookPostsComponent"/>
+  <testcase name="BookPostsComponent should delete a book post" time="0.001" classname="BookPostsComponent"/>
+  <testcase name="BookPostsComponent should load all book posts on init" time="0.002" classname="BookPostsComponent"/>
+  <testcase name="BookPostsComponent should add a book post" time="0.002" classname="BookPostsComponent"/>
+  <testcase name="BookPostsComponent should create" time="0.001" classname="BookPostsComponent"/>
+  <system-out>
+    <![CDATA[
+]]>
+  </system-out>
+  <system-err/>
+</testsuite>

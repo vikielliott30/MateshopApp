@@ -1,0 +1,44 @@
+<h2>{{ isEditMode ? 'Edit mate post' : 'Add new mate post' }}</h2>
+
+<form (ngSubmit)="onSubmit()">
+  <div class="input-group">
+      <label for="name">Name</label>
+      <input id="name" [(ngModel)]="bookPost.name" name="name" required />
+    </div>
+
+    <div class="input-group">
+      <label for="brand">Brand</label>
+      <input id="brand" [(ngModel)]="bookPost.brand" name="brand">
+    </div>
+
+    <div class="input-group">
+      <label for="category">Category</label>
+      <input id="category" [(ngModel)]="bookPost.category" name="category">
+    </div>
+
+    <div class="input-group">
+      <label for="description">Description</label>
+      <textarea id="description" [(ngModel)]="bookPost.description" name="description"></textarea>
+    </div>
+
+    <div class="input-group">
+      <label for="condition">Condition</label>
+      <select id="condition" [(ngModel)]="bookPost.condition" name="condition">
+        <option value="">Select Condition</option>
+        <option value="new">New</option>
+        <option value="used">Used</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label for="price">Price</label>
+      <input id="price" [(ngModel)]="bookPost.price" name="price">
+    </div>
+
+    <div class="input-group">
+      <label for="imageUrl">Image Url</label>
+      <input id="imageUrl" [(ngModel)]="bookPost.imageUrl" name="imageUrl">
+    </div>
+
+  <button type="submit">{{ isEditMode ? 'Update' : 'Create' }}</button>
+</form>

@@ -1,0 +1,81 @@
+/* You can add global styles to this file, and also import other style files */
+/* https://colorhunt.co/palette/fff2e0c0c9eea2aadb898ac4 
+
+<span *ngIf="isAuthenticated()">Hi, {{ userId }}!</span>
+*/
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #000000;
+  color: #333;
+  height: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  /* 
+    background-color: blue;
+  */
+  background-color: #C0C9EE;
+  color: #898AC4;
+  padding: 1rem 2rem;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  color: black;
+  margin-right: 1.5rem;
+  font-weight: bold;
+}
+
+.h-btn {
+  color: black;
+  cursor: pointer;
+}
+
+.h-btn:hover {
+  background-color: #898AC4;
+}
+
+main {
+  flex: 1;
+  padding: 2rem;
+}
+
+footer {
+  background-color: #C0C9EE;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: black;
+}

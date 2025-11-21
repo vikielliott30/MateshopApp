@@ -1,0 +1,22 @@
+<header>
+  <div class="header-content">
+    <h1>{{ title }}</h1>
+
+    <nav class="nav-links">
+      <button class="h-btn" (click)="goTo('/mates')">Home</button>
+      <button *ngIf="!isAuthenticated()" class="h-btn" (click)="goTo('/login')">Login</button>
+      <button *ngIf="isAuthenticated()"class="h-btn" (click)="goTo('/add-mate')">Sell your mates</button>
+      <button *ngIf="isAuthenticated()" class="h-btn" (click)="logout()">Logout</button>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<footer>
+  <p>&copy; Our secondhand bookshop</p>
+</footer>

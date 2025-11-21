@@ -1,0 +1,263 @@
+trigger:
+  - main
+
+pr:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: windows-latest
+
+variables:
+  solution: "**/*.sln"
+  buildPlatform: Any CPU
+  buildConfiguration: Release
+  ConnectedServiceName: Azure subscription 1 (5341073c-194f-47d6-9c70-69c9a32cbcdf)
+  ResourceGroupName: Bookshop
+  frontPath: ./BookshopAngular
+  backPath: ./BookshopApi
+  buildOutput: $(Build.ArtifactStagingDirectory)
+  WebAppKind: webApp
+  DevBackWebAppName: BookshopBackendWebApp-QA
+  DevFrontWebAppName: BookshopFrontendWebApp-QA
+  DevFrontendUrl: 'https://bookshopfrontendwebapp-qa-cjbme8dgaqb9asgc.brazilsouth-01.azurewebsites.net'
+  DevBackendUrl: 'https://bookshopbackendwebapp-qa-d4ggcpaqcmfvdfd9.brazilsouth-01.azurewebsites.net'
+
+  ProdBackWebAppName: BookshopBackendWebApp-PROD
+  ProdFrontWebAppName: BookshopFrontendWebApp-PROD
+  ProdBackendUrl: 'https://bookshopbackendwebapp-prod-frfrb2g2bffghrdq.brazilsouth-01.azurewebsites.net'
+
+stages:
+  - stage: BuildAndTest
+    displayName: Build and Test API and Front
+    jobs:
+
+# BUILD AND TEST BACKEND
+      - job: BuildDotnet
+        displayName: Build and Test API
+        pool:
+          vmImage: windows-latest
+        steps:
+          - checkout: self
+            fetchDepth: 0
+          - task: DotNetCoreCLI@2
+            displayName: Restaurar paquetes NuGet
+            inputs:
+              command: restore
+              projects: $(solution)
+          - task: DotNetCoreCLI@2
+            displayName: Ejecutar pruebas de la API
+            inputs:
+              command: test
+              projects: "**/*.Tests.csproj"
+              arguments: --collect:"XPlat Code Coverage"
+              continueOnError: false
+          - task: PublishCodeCoverageResults@2
+            displayName: Publicar resultados de code coverage del back-end
+            inputs:
+              summaryFileLocation: $(Agent.TempDirectory)/**/*.cobertura.xml
+              failIfCoverageEmpty: false
+          - task: DotNetCoreCLI@2
+            displayName: Build BookshopApi
+            inputs:
+              command: build
+              projects: BookshopApi/BookshopApi/BookshopApi.csproj
+              arguments: --configuration $(buildConfiguration) --output
+                $(buildOutput)/api  --self-contained false
+          - task: DotNetCoreCLI@2
+            displayName: Publish BookshopApi
+            inputs:
+              command: publish
+              projects: BookshopApi/BookshopApi/BookshopApi.csproj
+              arguments: --configuration $(buildConfiguration) --output $(buildOutput)
+              zipAfterPublish: true
+          - task: PublishBuildArtifacts@1
+            displayName: Publish build artifacts
+            inputs:
+              PathtoPublish: $(buildOutput)
+              ArtifactName: drop-back
+      
+# BUILD AND TEST FRONTEND
+      - job: BuildAngular
+        displayName: Build and Test Angular
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - checkout: self
+            fetchDepth: 0
+          - task: NodeTool@0
+            displayName: Instalar Node.js
+            inputs:
+              versionSpec: 22.x
+          - task: CmdLine@2
+            displayName: Instalar dependencias
+            inputs:
+              script: npm install
+              workingDirectory: $(frontPath)
+          - script: npx ng test --karma-config=karma.conf.js --watch=false --browsers
+              ChromeHeadless --code-coverage
+            displayName: Ejecutar pruebas del front
+            workingDirectory: $(frontPath)
+            continueOnError: false
+          - task: PublishCodeCoverageResults@2
+            displayName: Publicar resultados de code coverage del front
+            inputs:
+              summaryFileLocation: $(frontPath)/coverage/lcov.info
+              failIfCoverageEmpty: false
+            condition: always()
+          - task: PublishTestResults@2
+            displayName: Publicar resultados de pruebas unitarias del front
+            inputs:
+              testResultsFormat: JUnit
+              testResultsFiles: $(frontPath)/test-results/test-results.xml
+              failTaskOnFailedTests: true
+            condition: always()
+          - task: CmdLine@2
+            displayName: Build Bookshop Frontend
+            condition: succeeded()
+            inputs:
+              script: npx ng build --configuration production
+              workingDirectory: $(frontPath)
+          - task: PublishBuildArtifacts@1
+            displayName: Publicar artefactos Angular
+            inputs:
+              PathtoPublish: $(frontPath)/dist/bookshop-angular/browser
+              ArtifactName: drop-front
+
+# DEPLOY BACKEND AND FRONTEND TO QA
+  - stage: DeployToQA
+    displayName: Deploy to QA
+    dependsOn: BuildAndTest
+    condition: succeeded()
+    jobs:
+      - job: DeployBackToQA
+        displayName: Deploy Backend to QA
+        steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: Download Build Artifacts
+            inputs:
+              buildType: current
+              artifactName: drop-back
+              targetPath: $(Pipeline.Workspace)/drop-back
+          - script: ls -l "$(Pipeline.Workspace)/drop-back"
+            displayName: List Pipeline Workspace Content (QA)
+          - task: AzureRmWebAppDeployment@4
+            displayName: Deploy to Azure App Service (QA)
+            inputs:
+              azureSubscription: $(ConnectedServiceName)
+              appType: webApp
+              WebAppName: $(DevBackWebAppName)
+              package: '$(Pipeline.Workspace)/drop-back//BookshopApi.zip'
+      - job: DeployFrontToQA
+        displayName: Deploy Frontend to QA
+        steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: Download Build Artifacts
+            inputs:
+              buildType: current
+              artifactName: drop-front
+              targetPath: $(Pipeline.Workspace)/drop-front
+          - script: ls -l "$(Pipeline.Workspace)/drop-front"
+            displayName: List Pipeline Workspace Content (QA)
+          - script: |
+              echo "window.env = { apiUrl: '$(DevBackendUrl)/api' };" > $(Pipeline.Workspace)/drop-front/assets/env.js
+            displayName: 'Set QA Environment Variables'
+          - task: AzureRmWebAppDeployment@4
+            displayName: Deploy to Azure App Service (QA)
+            inputs:
+              azureSubscription: $(ConnectedServiceName)
+              appType: webApp
+              WebAppName: $(DevFrontWebAppName)
+              package: $(Pipeline.Workspace)/drop-front
+
+# INTEGRATION TESTS WITH CYPRESS
+  - stage: IntegrationTesting
+    displayName: 'Integration Tests'
+    dependsOn: DeployToQA
+    condition: succeeded()
+    jobs:
+      - job: RunIntegrationTests
+        displayName: 'Run Cypress Tests'
+        pool:
+          vmImage: ubuntu-latest
+        variables:
+          TERM: xterm
+          baseUrl: $(DevFrontendUrl)
+          apiUrl: $(DevBackendUrl)
+        steps:
+          - script: |
+              cd $(Build.SourcesDirectory)/BookshopAngular
+              npm install typescript ts-node
+              npm install mocha --save-dev
+            displayName: 'Install TypeScript and Mocha'
+
+          - script: |
+              cd $(Build.SourcesDirectory)/BookshopAngular
+              npx cypress run --config-file cypress.config.ts --env "baseUrl=$(baseUrl),apiUrl=$(apiUrl)"
+            displayName: 'Run Cypress E2E Tests'
+            continueOnError: false
+
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFiles: '$(Build.SourcesDirectory)/BookshopAngular/cypress/results/*.xml'
+              testRunTitle: 'Cypress E2E Tests (QA)'
+              publishRunAttachments: true
+            displayName: 'Publicar resultados Cypress'
+            condition: always()
+
+# DEPLOY BACKEND AND FRONTEND TO PROD
+  - stage: DeployToProd
+    displayName: Deploy to Production
+    dependsOn:
+      - DeployToQA
+      - IntegrationTesting
+    condition: succeeded()
+    jobs:
+      - deployment: DeployBackToProd
+        displayName: Deploy Backend to Production
+        environment: Production
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: DownloadPipelineArtifact@2
+                  displayName: Download Build Artifacts
+                  inputs:
+                    buildType: current
+                    artifactName: drop-back
+                    targetPath: $(Pipeline.Workspace)/drop-back
+                - script: ls -l "$(Pipeline.Workspace)/drop-back"
+                  displayName: List Pipeline Workspace Content (Production)
+                - task: AzureRmWebAppDeployment@4
+                  displayName: Deploy to Azure App Service (Production)
+                  inputs:
+                    azureSubscription: $(ConnectedServiceName)
+                    appType: webApp
+                    WebAppName: $(ProdBackWebAppName)
+                    package: $(Pipeline.Workspace)/drop-back
+      - deployment: DeployFrontToProd
+        displayName: Deploy Frontend to Production
+        environment: Production
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: DownloadPipelineArtifact@2
+                  displayName: Download Build Artifacts
+                  inputs:
+                    buildType: current
+                    artifactName: drop-front
+                    targetPath: $(Pipeline.Workspace)/drop-front
+                - script: ls -l "$(Pipeline.Workspace)/drop-front"
+                  displayName: List Pipeline Workspace Content (Production)
+                - script: |
+                    echo "window.env = { apiUrl: '$(ProdBackendUrl)/api' };" > $(Pipeline.Workspace)/drop-front/assets/env.js
+                  displayName: 'Set Production Environment Variables'
+                - task: AzureRmWebAppDeployment@4
+                  displayName: Deploy to Azure App Service (Production)
+                  inputs:
+                    azureSubscription: $(ConnectedServiceName)
+                    appType: webApp
+                    WebAppName: $(ProdFrontWebAppName)
+                    package: $(Pipeline.Workspace)/drop-front
