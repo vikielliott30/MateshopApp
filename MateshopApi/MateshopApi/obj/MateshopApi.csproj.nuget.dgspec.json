@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi\\MateshopApi\\MateshopApi.csproj": {}
+    "C:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi\\MateshopApi\\MateshopApi.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi\\MateshopApi\\MateshopApi.csproj": {
+    "C:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi\\MateshopApi\\MateshopApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi\\MateshopApi\\MateshopApi.csproj",
+        "projectUniqueName": "C:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi\\MateshopApi\\MateshopApi.csproj",
         "projectName": "MateshopApi",
-        "projectPath": "c:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi\\MateshopApi\\MateshopApi.csproj",
+        "projectPath": "C:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi\\MateshopApi\\MateshopApi.csproj",
         "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi\\MateshopApi\\obj\\",
+        "outputPath": "C:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi\\MateshopApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config"

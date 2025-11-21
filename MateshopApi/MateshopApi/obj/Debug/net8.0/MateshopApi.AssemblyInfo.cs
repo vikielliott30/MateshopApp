@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MateshopApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+829bfb331e734723a2146a5bfa97edd1c82487b3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6123e76db60fadd10b1e6074a923f8f75ba5d55b")]
 [assembly: System.Reflection.AssemblyProductAttribute("MateshopApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MateshopApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

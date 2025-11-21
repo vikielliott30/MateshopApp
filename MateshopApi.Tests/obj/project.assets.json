@@ -4304,11 +4304,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi.Tests\\MateshopApi.Tests.csproj",
+      "projectUniqueName": "C:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi.Tests\\MateshopApi.Tests.csproj",
       "projectName": "MateshopApi.Tests",
-      "projectPath": "c:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi.Tests\\MateshopApi.Tests.csproj",
+      "projectPath": "C:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi.Tests\\MateshopApi.Tests.csproj",
       "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi.Tests\\obj\\",
+      "outputPath": "C:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -4323,8 +4323,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "c:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi\\MateshopApi\\MateshopApi.csproj": {
-              "projectPath": "c:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi\\MateshopApi\\MateshopApi.csproj"
+            "C:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi\\MateshopApi\\MateshopApi.csproj": {
+              "projectPath": "C:\\Users\\Usuario\\Universidad\\4to\\IngSW3\\FINAL\\MateshopApp\\MateshopApi\\MateshopApi\\MateshopApi.csproj"
             }
           }
         }
