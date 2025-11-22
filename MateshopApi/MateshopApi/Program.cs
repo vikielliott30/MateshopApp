@@ -1,27 +1,37 @@
 using MateshopApi.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+// CORS
+builder.Services.AddCors(o => o.AddPolicy("MyPolicy", policyBuilder =>
 {
-    builder.AllowAnyOrigin()
-           .AllowAnyMethod()
-           .AllowAnyHeader();
+    policyBuilder.AllowAnyOrigin()
+                 .AllowAnyMethod()
+                 .AllowAnyHeader();
 }));
 
-var connectionString = Environment.GetEnvironmentVariable("cnn-string-qa")
-                        ?? builder.Configuration.GetConnectionString("DefaultConnection");
+// 1) Resolver la cadena de conexión
+//   - Primero intenta leer la variable de entorno "cnn-string-qa" (Azure).
+//   - Si no está, usa DefaultConnection de appsettings.json (local).
+var connectionString = Environment.GetEnvironmentVariable("cnn-string-qa");
 
 if (string.IsNullOrEmpty(connectionString))
 {
-    throw new InvalidOperationException("La variable de entorno no esta configurada");
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 }
 
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException(
+        "No se encontró cadena de conexión. " +
+        "Configure la variable de entorno 'cnn-string-qa' o la conexión 'DefaultConnection' en appsettings.json."
+    );
+}
+
+// 2) Registrar el DbContext usando SIEMPRE la connectionString resuelta arriba
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-   options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -29,16 +39,14 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Crear la base de datos y tablas si no existen
+// 3) Crear la base de datos y tablas si no existen
 using (var scope = app.Services.CreateScope())
 {
     try
     {
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        
-        // Esto creará la base de datos y todas las tablas basadas en tus modelos
-        context.Database.EnsureCreated();
-        
+        context.Database.EnsureCreated(); // crea MateshopDB y sus tablas si no existen
+
         Console.WriteLine("Base de datos creada exitosamente o ya existía.");
     }
     catch (Exception ex)
@@ -47,7 +55,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configure the HTTP request pipeline.
+// 4) Pipeline HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
